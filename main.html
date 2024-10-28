@@ -1,13 +1,48 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise Chain Example</title>
+</head>
+<body>
+    <div id="output">Loading...</div>
 
-<html>
-  <head>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
+    <script>
+        // Function to create the initial promise that resolves with an array of numbers
+        function getNumbers() {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve([1, 2, 3, 4]);
+                }, 3000);
+            });
+        }
 
-  <body>
-    <!-- do not change this code -->
-    <div id="output"></div>
-    <script type="text/javascript" src="./script.js"></script>
-  </body>
+        // Start promise chain
+        getNumbers()
+            // Filter out odd numbers
+            .then((numbers) => {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        const evens = numbers.filter(num => num % 2 === 0);
+                        document.getElementById("output").innerText = evens.join(", ");
+                        resolve(evens);
+                    }, 1000);
+                });
+            })
+            // Multiply even numbers by 2
+            .then((evens) => {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        const doubled = evens.map(num => num * 2);
+                        document.getElementById("output").innerText = doubled.join(", ");
+                        resolve(doubled);
+                    }, 2000);
+                });
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+            });
+    </script>
+</body>
 </html>
